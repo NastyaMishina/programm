@@ -1,0 +1,89 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <time.h>
+#include <windows.h>
+#include <cstring>
+
+
+using namespace std; 
+
+	class Worker
+	{
+	private:
+		std::string name;
+		double Exp = 0; //Experience is measured in years
+		double hour_wage = 0;
+		double work_hours = 0;
+		double fixed_salary = 0;
+		double premium = 0;
+		double premium_percent = 0;
+
+		double calcSalary(double work_hours, double hour_wage)
+		{
+			fixed_salary = work_hours * hour_wage;
+			return fixed_salary;
+		}
+
+		double calcPremium(double Exp)
+		{
+			if (Exp <= 1) {
+				premium_percent = 0;
+			}
+			else if (Exp > 1 && Exp < 3) {
+				premium_percent = 0.03;
+			}
+			else if (Exp > 3 && Exp < 5) {
+				premium_percent = 0.08;
+			}
+			else if (Exp > 5) {
+				premium_percent = 0.15;
+			}
+			premium = premium_percent * fixed_salary;
+			return premium;
+		}
+
+	public:
+
+		void ent_info()
+		{
+			cout << "Enter worker's name: ";
+			cin >> name;
+			cout << "Enter worker's Exp: ";
+			cin >> Exp;
+			cout << "Enter worker's hour wage: ";
+			cin >> hour_wage;
+			cout << "Enter work's hours :";
+			cin >> work_hours;
+		}
+		void info_show()
+		{
+			cout << "Worker's name is " << name << endl;
+			cout << "Worker's exp is equal to " << Exp << endl;
+			cout << "Worker's hourly wage is " << hour_wage << endl;
+			cout << name << " worked out " << work_hours <<" hours" << endl;
+			calcSalary(work_hours, hour_wage);
+			cout << name << "'s fixed_salary is " << fixed_salary <<" rubles'" << endl;
+			calcPremium(Exp);
+			cout << "Premium is " << premium <<" rubles'" << endl;
+		}
+		void TextFile() {
+			ofstream worker;
+			worker.open("Workers.txt", ios_base::app); 
+			worker << name << endl; 
+			worker << "Exp - " << Exp << endl; 
+			worker << "Hourly wage - " << hour_wage << endl;
+			worker << name << " has worked " << work_hours << " hour(s)" << endl; 
+			worker << "Fixed_salary = " << fixed_salary << endl; 
+			worker << "Premium = " << premium <<"\n" << endl; 
+			worker.close();
+			cout << "Information about " << name << "was written in the file 'Workers.txt'" << endl;
+		}
+	};
+
+	int main() {
+		Worker one; 
+		one.ent_info();
+		one.info_show();
+		one.TextFile();
+	}
